@@ -1,0 +1,128 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { 
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: linear-gradient(180deg, #fff8e1 0%, #fff3e0 50%, #fafafa 100%) !important;
+  background-attachment: fixed;
+}
+
+#root { min-height: 100vh; }
+
+/* 卡片 */
+.ant-card {
+  border-radius: 16px !important;
+  border: none !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+.ant-card:hover {
+  box-shadow: 0 12px 32px rgba(230,81,0,0.12) !important;
+  transform: translateY(-4px);
+}
+.ant-card-cover img {
+  transition: transform 0.4s ease;
+}
+.ant-card:hover .ant-card-cover img {
+  transform: scale(1.05);
+}
+
+/* 按钮 */
+.ant-btn-primary {
+  border-radius: 10px !important;
+  border: none !important;
+  background: linear-gradient(135deg, #e65100, #ff8f00) !important;
+  box-shadow: 0 4px 14px rgba(230,81,0,0.3);
+  transition: all 0.25s !important;
+  font-weight: 500;
+}
+.ant-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(230,81,0,0.4) !important;
+}
+.ant-btn-primary:active { transform: scale(0.98); }
+
+/* 输入框 */
+.ant-input, .ant-input-password, .ant-select-selector, .ant-input-number {
+  border-radius: 10px !important;
+  border: 1px solid #e8e8e8 !important;
+  transition: all 0.2s !important;
+}
+.ant-input:focus, .ant-input-password:focus, .ant-select-selector:focus {
+  border-color: #ff8f00 !important;
+  box-shadow: 0 0 0 2px rgba(255,143,0,0.1) !important;
+}
+
+/* 表格 */
+.ant-table { border-radius: 12px; overflow: hidden; }
+.ant-table-thead > tr > th {
+  background: #fff8e1 !important;
+  font-weight: 600;
+  border-bottom: 2px solid #ffe0b2 !important;
+}
+
+/* 标签 */
+.ant-tag { border-radius: 6px; font-weight: 500; }
+
+/* 滚动条 */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d9d9d9; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #bfbfbf; }
+
+/* Spin */
+.ant-spin-dot-item { background: #ff8f00 !important; }
+
+/* Badge */
+.ant-badge-count { background: #ff4d4f !important; box-shadow: 0 0 0 2px #fff; }
+
+/* Footer */
+.app-footer {
+  text-align: center;
+  padding: 32px 20px;
+  color: #5a3e2b;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  background: linear-gradient(180deg, rgba(255,248,224,0.9), rgba(255,243,224,0.95));
+  backdrop-filter: blur(10px);
+  border-top: 2px solid #ffe0b2;
+  box-shadow: 0 -4px 16px rgba(230,81,0,0.06);
+}
+
+/* Modal */
+.ant-modal-content { border-radius: 16px !important; overflow: hidden; }
+.ant-modal-header { border-bottom: 1px solid #f0f0f0; }
+
+/* 公告栏 */
+.announcement-card {
+  background: linear-gradient(135deg, #fff8e1, #ffe0b2);
+  border: 1px solid #ffcc80;
+  border-radius: 14px;
+  padding: 14px 20px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.announcement-card:hover { background: linear-gradient(135deg, #ffecb3, #ffcc80); }
+.announcement-icon { font-size: 20px; animation: pulse 2s infinite; }
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* Tabs */
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn { color: #e65100 !important; }
+.ant-tabs-ink-bar { background: #e65100 !important; }
+
+/* Select */
+.ant-select-focused .ant-select-selector { border-color: #ff8f00 !important; box-shadow: 0 0 0 2px rgba(255,143,0,0.1) !important; }
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .ant-card { border-radius: 12px !important; }
+}

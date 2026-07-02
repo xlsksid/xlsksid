@@ -1,0 +1,38 @@
+@startuml
+skinparam backgroundColor #FEFEFE
+title 下单判定树
+start
+:提交订单;
+if (库存充足？) then (否)
+  :事务回滚\n提示"库存不足";
+  stop
+endif
+if (使用优惠券？) then (是)
+  if (券有效且未使用？) then (否)
+    :事务回滚\n提示"优惠券不可用";
+    stop
+  endif
+  if (满足最低消费？) then (否)
+    :事务回滚\n提示"未达最低消费";
+    stop
+  endif
+  :原子锁定优惠券;
+  :计算优惠金额;
+endif
+if (使用积分？) then (是)
+  if (积分余额足够？) then (否)
+    :事务回滚\n提示"积分不足";
+    stop
+  endif
+  :根据会员等级计算汇率;
+  :扣减积分;
+  :计算积分抵扣金额;
+endif
+:计算实付金额;
+:生成订单号;
+:创建订单+明细+支付记录;
+:赠送消费积分;
+:检查会员升级;
+:订单创建成功;
+stop
+@enduml

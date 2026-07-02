@@ -1,0 +1,33 @@
+﻿@startuml
+skinparam conditionStyle InsideDiamond
+skinparam defaultFontSize 10
+title 积分与会员模块流程图
+start
+:完成支付;
+:消费额1%送积分;
+if (积分>=5000？) then (是)
+  :铂金 70分=1元;
+  :记录升级;
+else
+  if (积分>=2000？) then (是)
+    :金牌 80分=1元;
+    :记录升级;
+  else
+    if (积分>=500？) then (是)
+      :银牌 90分=1元;
+      :记录升级;
+    else
+      :铜牌 100分=1元;
+    endif
+  endif
+endif
+:选积分抵扣;
+:按等级算汇率;
+if (积分够？) then (是)
+  :扣减积分;
+  :记录消费;
+else
+  :提示不足;
+endif
+stop
+@enduml

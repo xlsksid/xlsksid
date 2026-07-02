@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: spicy-braise-backend
+
+  datasource:
+    url: jdbc:sqlserver://localhost:49470;databaseName=SpicyBraiseDB;encrypt=false;trustServerCertificate=true
+    username: sa
+    password: SpicyBraise123!
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+      max-lifetime: 1200000
+      pool-name: SpicyBraiseHikariCP
+
+  transaction:
+    default-timeout: 30
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: isDeleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+app:
+  jwt:
+    secret: c3BpY3ktYnJhaXNlLWp3dC1zZWNyZXQta2V5LTIwMjUtbWluLWxlbmd0aC0zMg==
+    expiration-ms: 86400000   # 24 hours
+
+logging:
+  level:
+    com.spicybraise: DEBUG
+    org.springframework.security: INFO

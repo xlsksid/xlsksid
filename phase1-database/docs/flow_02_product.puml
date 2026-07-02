@@ -1,0 +1,29 @@
+﻿@startuml
+skinparam conditionStyle InsideDiamond
+skinparam defaultFontSize 11
+title 商品模块流程图
+|顾客|
+start
+:浏览商品列表;
+if (选分类？) then (是)
+  :按分类筛选;
+endif
+:查看商品卡片;
+:查看详情;
+:加入购物车;
+stop
+|管理端|
+start
+:进入后台管理;
+:查看商品表格;
+if (新增？) then (是)
+  :填写表单提交;
+else
+  if (编辑？) then (是)
+    :回填表单更新;
+  else
+    :软删除;
+  endif
+endif
+stop
+@enduml

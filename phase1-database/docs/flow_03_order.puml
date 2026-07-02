@@ -1,0 +1,34 @@
+﻿@startuml
+skinparam conditionStyle InsideDiamond
+skinparam defaultFontSize 11
+title 订单与支付模块流程图
+start
+:浏览商品;
+:加入购物车;
+:去结算;
+:提交订单;
+:行锁扣库存;
+if (库存够？) then (否)
+  :回滚;
+  stop
+endif
+if (用券？) then (是)
+  :锁定券+折扣;
+endif
+:按汇率扣积分;
+if (积分够？) then (否)
+  :回滚;
+  stop
+endif
+:计算实付;
+:生成订单号;
+:创建订单+支付;
+:送积分+升级;
+:模拟支付;
+if (已支付？) then (是)
+  :提示已支付;
+  stop
+endif
+:支付成功;
+stop
+@enduml

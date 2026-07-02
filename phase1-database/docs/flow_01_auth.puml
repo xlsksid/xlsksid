@@ -1,0 +1,37 @@
+@startuml
+!pragma layout smetana
+skinparam conditionStyle InsideDiamond
+skinparam defaultFontSize 11
+skinparam activityDiamondBackgroundColor #fff2cc
+skinparam activityDiamondBorderColor #d6b656
+title 用户认证模块流程图
+start
+:访问系统;
+if (已登录？) then (否)
+  if (有账号？) then (是)
+    :输入用户名密码;
+    :验证密码;
+    if (通过？) then (是)
+      :生成JWT;
+      :存储Token;
+      :登录成功;
+    else (否)
+      :401错误;
+      stop
+    endif
+  else (否)
+    :填写注册;
+    :加密密码;
+    :写入数据库;
+    :登录成功;
+  endif
+else (是)
+  :读取Token;
+  if (过期？) then (是)
+    :跳转登录;
+  else (否)
+    :正常访问;
+  endif
+endif
+stop
+@enduml

@@ -1,0 +1,52 @@
+@startuml 系统架构图
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 13
+
+title 香辣卤味管理系统 - 系统架构图
+
+package "客户端" {
+  [浏览器\n(React + Ant Design)] as Browser
+}
+
+package "前端服务" {
+  [Nginx\n(静态资源 + 反向代理)] as Nginx
+}
+
+package "应用层 (Spring Boot 3.2)" {
+  [认证模块\n(JWT + Spring Security)] as Auth
+  [商品管理] as Product
+  [订单管理] as Order
+  [支付模块] as Payment
+  [优惠券模块] as Coupon
+  [评价模块] as Feedback
+  [积分与会员] as Points
+}
+
+package "数据层" {
+  [MyBatis-Plus\n(ORM)] as MyBatis
+}
+
+database "SQL Server" {
+  [SpicyBraiseDB\n(10张表)] as DB
+}
+
+Browser --> Nginx : HTTP
+Nginx --> Auth : /api/**
+Nginx --> Product : /api/products/**
+Nginx --> Order : /api/orders/**
+Nginx --> Payment : /api/payments/**
+Nginx --> Coupon : /api/coupons/**
+Nginx --> Feedback : /api/feedback/**
+Nginx --> Points : /api/users/me
+
+Auth --> MyBatis
+Product --> MyBatis
+Order --> MyBatis
+Payment --> MyBatis
+Coupon --> MyBatis
+Feedback --> MyBatis
+Points --> MyBatis
+
+MyBatis --> DB : JDBC
+
+@enduml

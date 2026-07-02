@@ -1,0 +1,197 @@
+@startuml 香辣卤味管理系统_ER图
+' ============================================================
+' 香辣卤味管理系统 — 数据库 ER 图
+' SQL Server T-SQL / PlantUML
+' ============================================================
+
+!define table(x) class x << (T,#FFAAAA) >>
+!define primary_key(x) <b><u>x</u></b>
+!define foreign_key(x) <i>x</i>
+
+skinparam class {
+    BackgroundColor #FEFECE
+    BorderColor #A80036
+    ArrowColor #A80036
+}
+
+' -------------------- 用户表 --------------------
+entity "用户" as users {
+    primary_key( id ): BIGINT IDENTITY
+    --
+    username : NVARCHAR(64) UNIQUE
+    password_hash : NVARCHAR(256)
+    email : NVARCHAR(128) UNIQUE NULL
+    phone : NVARCHAR(20) NULL
+    role : NVARCHAR(16) <<admin|staff|customer>>
+    avatar : NVARCHAR(512) NULL
+    balance : DECIMAL(10,2)
+    points : INT
+    is_deleted : BIT
+    created_at : DATETIME2(0)
+    updated_at : DATETIME2(0)
+    rowversion : ROWVERSION
+}
+
+' -------------------- 分类表 --------------------
+entity "商品分类" as categories {
+    primary_key( id ): INT IDENTITY
+    --
+    name : NVARCHAR(64) UNIQUE
+    description : NVARCHAR(256) NULL
+    sort_order : INT
+    image_url : NVARCHAR(512) NULL
+    is_deleted : BIT
+    created_at : DATETIME2(0)
+    updated_at : DATETIME2(0)
+    rowversion : ROWVERSION
+}
+
+' -------------------- 商品表 --------------------
+entity "商品" as products {
+    primary_key( id ): BIGINT IDENTITY
+    --
+    foreign_key( category_id ): INT
+    name : NVARCHAR(128)
+    description : NVARCHAR(1024) NULL
+    price : DECIMAL(10,2)
+    cost_price : DECIMAL(10,2)
+    stock : INT
+    unit : NVARCHAR(16)
+    image_url : NVARCHAR(512) NULL
+    spiciness : TINYINT <<1-5>>
+    is_available : BIT
+    is_deleted : BIT
+    created_at : DATETIME2(0)
+    updated_at : DATETIME2(0)
+    rowversion : ROWVERSION
+}
+
+' -------------------- 订单表 --------------------
+entity "订单" as orders {
+    primary_key( id ): BIGINT IDENTITY
+    --
+    foreign_key( user_id ): BIGINT
+    order_no : NVARCHAR(32) UNIQUE
+    total_amount : DECIMAL(10,2)
+    discount_amount : DECIMAL(10,2)
+    points_deducted : INT
+    points_amount : DECIMAL(10,2)
+    actual_amount : DECIMAL(10,2)
+    status : NVARCHAR(16) <<pending…refunded>>
+    remark : NVARCHAR(512) NULL
+    is_deleted : BIT
+    created_at : DATETIME2(0)
+    updated_at : DATETIME2(0)
+    rowversion : ROWVERSION
+}
+
+' -------------------- 订单明细 --------------------
+entity "订单明细" as order_details {
+    primary_key( id ): BIGINT IDENTITY
+    --
+    foreign_key( order_id ): BIGINT
+    foreign_key( product_id ): BIGINT
+    quantity : INT
+    unit_price : DECIMAL(10,2)
+    subtotal : DECIMAL(10,2)
+    created_at : DATETIME2(0)
+}
+
+' -------------------- 支付记录 --------------------
+entity "支付记录" as payments {
+    primary_key( id ): BIGINT IDENTITY
+    --
+    foreign_key( order_id ): BIGINT
+    foreign_key( user_id ): BIGINT
+    amount : DECIMAL(10,2)
+    payment_method : NVARCHAR(16) <<wechat|alipay|cash|stored|points>>
+    payment_status : NVARCHAR(16) <<pending|success|failed|refunded>>
+    transaction_id : NVARCHAR(128) NULL
+    paid_at : DATETIME2(0) NULL
+    created_at : DATETIME2(0)
+    updated_at : DATETIME2(0)
+    rowversion : ROWVERSION
+}
+
+' -------------------- 反馈表 --------------------
+entity "评价" as feedback {
+    primary_key( id ): BIGINT IDENTITY
+    --
+    foreign_key( user_id ): BIGINT
+    foreign_key( product_id ): BIGINT
+    foreign_key( order_id ): BIGINT
+    rating : TINYINT <<1-5>>
+    comment : NVARCHAR(1024) NULL
+    is_deleted : BIT
+    created_at : DATETIME2(0)
+    updated_at : DATETIME2(0)
+    rowversion : ROWVERSION
+}
+
+' -------------------- 积分记录 --------------------
+entity "积分记录" as points_record {
+    primary_key( id ): BIGINT IDENTITY
+    --
+    foreign_key( user_id ): BIGINT
+    points : INT <<+earn / -spend>>
+    type : NVARCHAR(8) <<earn|spend>>
+    description : NVARCHAR(256) NULL
+    order_id : BIGINT NULL
+    created_at : DATETIME2(0)
+}
+
+' -------------------- 优惠券模板 --------------------
+entity "优惠券模板" as coupon_template {
+    primary_key( id ): INT IDENTITY
+    --
+    name : NVARCHAR(64)
+    type : NVARCHAR(16) <<discount|reduction>>
+    discount_rate : DECIMAL(3,2) NULL
+    reduction_amount : DECIMAL(10,2) NULL
+    min_order_amount : DECIMAL(10,2)
+    valid_days : INT
+    total_quantity : INT
+    issued_count : INT
+    is_active : BIT
+    created_at : DATETIME2(0)
+    updated_at : DATETIME2(0)
+    rowversion : ROWVERSION
+}
+
+' -------------------- 用户优惠券 --------------------
+entity "用户优惠券" as user_coupon {
+    primary_key( id ): BIGINT IDENTITY
+    --
+    foreign_key( user_id ): BIGINT
+    foreign_key( coupon_template_id ): INT
+    status : NVARCHAR(16) <<unused|used|expired>>
+    used_order_id : BIGINT NULL
+    valid_from : DATETIME2(0)
+    valid_to : DATETIME2(0)
+    used_at : DATETIME2(0) NULL
+    created_at : DATETIME2(0)
+    rowversion : ROWVERSION
+}
+
+' ===================== 关系 =====================
+
+users ||--o{ orders : "下单"
+users ||--o{ payments : "支付"
+users ||--o{ feedback : "评价"
+users ||--o{ points_record : "积分变动"
+users ||--o{ user_coupon : "持有优惠券"
+
+categories ||--o{ products : "分类"
+
+products ||--o{ order_details : "被购买"
+products ||--o{ feedback : "被评价"
+
+orders ||--o{ order_details : "包含"
+orders ||--o{ payments : "对应支付"
+orders ||--o{ feedback : "被评价"
+orders ||--o{ points_record : "关联积分"
+orders ||--o{ user_coupon : "使用优惠券"
+
+coupon_template ||--o{ user_coupon : "模板 -> 用户券"
+
+@enduml

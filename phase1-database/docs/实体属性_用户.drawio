@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram name="用户实体属性图" id="user">
+    <mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="700">
+      <root>
+        <mxCell id="0" /><mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="t" value="用户实体属性图" style="text;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="350" y="10" width="200" height="30" as="geometry" /></mxCell>
+
+        <!-- Center Entity -->
+        <mxCell id="center" value="用户" style="rounded=0;fillColor=#BBDEFB;strokeColor=#1565C0;fontSize=18;fontStyle=1;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="380" y="300" width="140" height="50" as="geometry" /></mxCell>
+
+        <!-- Top attributes -->
+        <mxCell id="a1" value="用户编号" style="ellipse;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=11;" vertex="1" parent="1"><mxGeometry x="380" y="50" width="120" height="40" as="geometry" /></mxCell>
+        <mxCell id="a2" value="用户名" style="ellipse;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=11;" vertex="1" parent="1"><mxGeometry x="530" y="80" width="120" height="40" as="geometry" /></mxCell>
+        <mxCell id="a3" value="密码" style="ellipse;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=11;" vertex="1" parent="1"><mxGeometry x="650" y="150" width="120" height="40" as="geometry" /></mxCell>
+
+        <!-- Right attributes -->
+        <mxCell id="a4" value="邮箱" style="ellipse;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=11;" vertex="1" parent="1"><mxGeometry x="700" y="260" width="120" height="40" as="geometry" /></mxCell>
+        <mxCell id="a5" value="手机号" style="ellipse;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=11;" vertex="1" parent="1"><mxGeometry x="700" y="340" width="120" height="40" as="geometry" /></mxCell>
+        <mxCell id="a6" value="角色" style="ellipse;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=11;" vertex="1" parent="1"><mxGeometry x="680" y="430" width="120" height="40" as="geometry" /></mxCell>
+        <mxCell id="a7" value="头像" style="ellipse;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=11;" vertex="1" parent="1"><mxGeometry x="620" y="510" width="120" height="40" as="geometry" /></mxCell>
+
+        <!-- Bottom attributes -->
+        <mxCell id="a8" value="账户余额" style="ellipse;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=11;" vertex="1" parent="1"><mxGeometry x="380" y="570" width="120" height="40" as="geometry" /></mxCell>
+        <mxCell id="a9" value="积分" style="ellipse;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=11;" vertex="1" parent="1"><mxGeometry x="200" y="510" width="120" height="40" as="geometry" /></mxCell>
+
+        <!-- Left attributes -->
+        <mxCell id="a10" value="会员等级" style="ellipse;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=11;" vertex="1" parent="1"><mxGeometry x="80" y="430" width="120" height="40" as="geometry" /></mxCell>
+        <mxCell id="a11" value="创建时间" style="ellipse;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=11;" vertex="1" parent="1"><mxGeometry x="80" y="340" width="120" height="40" as="geometry" /></mxCell>
+        <mxCell id="a12" value="更新时间" style="ellipse;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=11;" vertex="1" parent="1"><mxGeometry x="80" y="260" width="120" height="40" as="geometry" /></mxCell>
+
+        <!-- Lines from center to each attribute -->
+        <mxCell edge="1" parent="1" source="center" target="a1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="450" y="150"/><mxPoint x="440" y="150"/></Array></mxGeometry></mxCell>
+        <mxCell edge="1" parent="1" source="center" target="a2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell edge="1" parent="1" source="center" target="a3"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="520" y="325"/><mxPoint x="710" y="325"/><mxPoint x="710" y="200"/></Array></mxGeometry></mxCell>
+        <mxCell edge="1" parent="1" source="center" target="a4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell edge="1" parent="1" source="center" target="a5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell edge="1" parent="1" source="center" target="a6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell edge="1" parent="1" source="center" target="a7"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell edge="1" parent="1" source="center" target="a8"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell edge="1" parent="1" source="center" target="a9"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell edge="1" parent="1" source="center" target="a10"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell edge="1" parent="1" source="center" target="a11"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell edge="1" parent="1" source="center" target="a12"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

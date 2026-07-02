@@ -1,0 +1,110 @@
+version: "3.9"
+
+services:
+  # ============================================================
+  # SQL Server 2022 Express
+  # ============================================================
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: spicybraise-db
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "SpicyBraise123!"
+      MSSQL_PID: Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql/data
+      - ./phase1-database/migrations:/migrations:ro
+      - ./phase1-database/seed:/seed:ro
+      - ./init-db.sh:/init-db.sh:ro
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$${MSSQL_SA_PASSWORD}" -C -Q "SELECT 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - spicy-net
+
+  # ============================================================
+  # 数据库初始化
+  # ============================================================
+  db-init:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: spicybraise-db-init
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      MSSQL_SA_PASSWORD: "SpicyBraise123!"
+    volumes:
+      - ./phase1-database/migrations:/migrations:ro
+      - ./phase1-database/seed:/seed:ro
+      - ./init-db.sh:/init-db.sh:ro
+    entrypoint: >
+      /bin/bash -c "
+        for f in /migrations/V*.sql; do
+          echo Running: $$f;
+          /opt/mssql-tools18/bin/sqlcmd -S sqlserver -U sa -P '${MSSQL_SA_PASSWORD}' -C -i $$f;
+        done;
+        /opt/mssql-tools18/bin/sqlcmd -S sqlserver -U sa -P '${MSSQL_SA_PASSWORD}' -C -i /seed/V13__seed_data.sql;
+        echo 'Database initialized successfully!';
+      "
+    networks:
+      - spicy-net
+
+  # ============================================================
+  # Spring Boot 后端
+  # ============================================================
+  backend:
+    build:
+      context: ./phase2-backend
+      dockerfile: Dockerfile
+    container_name: spicybraise-backend
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://sqlserver:1433;databaseName=SpicyBraiseDB;encrypt=false;trustServerCertificate=true
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: SpicyBraise123!
+      APP_JWT_SECRET: c3BpY3ktYnJhaXNlLWp3dC1zZWNyZXQta2V5LTIwMjUtbWluLWxlbmd0aC0zMg==
+      APP_JWT_EXPIRATION_MS: "86400000"
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/api/products"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    networks:
+      - spicy-net
+
+  # ============================================================
+  # React 前端 (Nginx)
+  # ============================================================
+  frontend:
+    build:
+      context: ./phase3-frontend
+      dockerfile: Dockerfile
+    container_name: spicybraise-frontend
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      - spicy-net
+
+volumes:
+  sqldata:
+
+networks:
+  spicy-net:
+    driver: bridge

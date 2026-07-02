@@ -1,0 +1,26 @@
+# Build
+target/
+dist/
+node_modules/
+.m2/
+*.jar
+*.war
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp
+*.txt
+.reasonix/
+__pycache__/
+*.pyc
+
+# Env
+.env
+application-local.yml

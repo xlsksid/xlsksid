@@ -1,0 +1,24 @@
+@startuml
+skinparam backgroundColor #FEFEFE
+title 会员等级判定树
+start
+:用户完成消费;
+:获取累计积分;
+if (积分 >= 5000？) then (是)
+  :铂金会员💎\n汇率: 70分=1元\n享全单7折券;
+else
+  if (积分 >= 2000？) then (是)
+    :金牌会员🥇\n汇率: 80分=1元\n享满60减20券;
+  else
+    if (积分 >= 500？) then (是)
+      :银牌会员🥈\n汇率: 90分=1元\n享满80减15券;
+    else
+      :铜牌会员🥉\n汇率: 100分=1元\n无专属券;
+    endif
+  endif
+endif
+if (等级变化？) then (是)
+  :记录升级流水\n🎉恭喜升级;
+endif
+stop
+@enduml

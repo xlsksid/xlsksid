@@ -1,0 +1,27 @@
+﻿@startuml
+skinparam conditionStyle InsideDiamond
+skinparam defaultFontSize 11
+title 后台管理模块流程图
+start
+:管理员登录;
+:进入后台管理;
+if (商品管理？) then (是)
+  :查看商品列表;
+  if (新增？) then (是)
+    :填写表单提交;
+  else
+    if (编辑？) then (是)
+      :回填表单更新;
+    else
+      :软删除;
+    endif
+  endif
+else
+  if (分类管理？) then (是)
+    :查看分类;
+  else
+    :查看优惠券模板;
+  endif
+endif
+stop
+@enduml

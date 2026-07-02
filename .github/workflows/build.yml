@@ -1,0 +1,64 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  # ============================================================
+  # 后端编译 + 测试
+  # ============================================================
+  backend:
+    name: Backend Build
+    runs-on: ubuntu-latest
+
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: Y
+          MSSQL_SA_PASSWORD: SpicyBraise123!
+        ports:
+          - 1433:1433
+        options: --health-cmd "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P SpicyBraise123! -C -Q 'SELECT 1'" --health-interval 10s --health-timeout 5s --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          cache: maven
+
+      - name: Build
+        run: mvn -f phase2-backend/pom.xml compile -q
+
+      - name: Test
+        run: mvn -f phase2-backend/pom.xml test -q
+        env:
+          SPRING_DATASOURCE_URL: jdbc:sqlserver://localhost:1433;databaseName=SpicyBraiseDB;encrypt=false;trustServerCertificate=true
+          SPRING_DATASOURCE_USERNAME: sa
+          SPRING_DATASOURCE_PASSWORD: SpicyBraise123!
+
+  # ============================================================
+  # 前端编译
+  # ============================================================
+  frontend:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: phase3-frontend/package-lock.json
+
+      - run: npm --prefix phase3-frontend ci
+      - run: npm --prefix phase3-frontend run build

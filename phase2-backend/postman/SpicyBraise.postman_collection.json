@@ -1,0 +1,267 @@
+{
+  "info": {
+    "name": "SpicyBraise API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{token}}", "type": "string" }
+    ]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  var json = pm.response.json();",
+                  "  pm.collectionVariables.set('token', json.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"customer03\",\n  \"password\": \"test123\",\n  \"email\": \"cust03@test.com\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/auth/register", "host": ["{{base_url}}"], "path": ["api","auth","register"] }
+          }
+        },
+        {
+          "name": "Login (customer01)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  var json = pm.response.json();",
+                  "  pm.collectionVariables.set('token', json.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"customer01\",\n  \"password\": \"test123\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api","auth","login"] }
+          }
+        },
+        {
+          "name": "Login (admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  var json = pm.response.json();",
+                  "  pm.collectionVariables.set('token', json.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"test123\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api","auth","login"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "List All Products",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/products", "host": ["{{base_url}}"], "path": ["api","products"] }
+          }
+        },
+        {
+          "name": "List by Category",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/products?categoryId=1", "host": ["{{base_url}}"], "path": ["api","products"], "query": [{ "key": "categoryId", "value": "1" }] }
+          }
+        },
+        {
+          "name": "Get Product",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/products/1", "host": ["{{base_url}}"], "path": ["api","products","1"] }
+          }
+        },
+        {
+          "name": "Create Product (admin)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Spicy Chicken Wings\",\n  \"price\": 22.00,\n  \"costPrice\": 10.00,\n  \"stock\": 200,\n  \"unit\": \"portion\",\n  \"categoryId\": 1,\n  \"spiciness\": 4,\n  \"isAvailable\": true\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/products", "host": ["{{base_url}}"], "path": ["api","products"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/categories", "host": ["{{base_url}}"], "path": ["api","categories"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Place Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "console.log('Order placed:', json.data.orderNo);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    { \"productId\": 1, \"quantity\": 2 },\n    { \"productId\": 4, \"quantity\": 1 }\n  ],\n  \"couponId\": null,\n  \"usePoints\": 0,\n  \"remark\": \"Extra spicy please\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/orders", "host": ["{{base_url}}"], "path": ["api","orders"] }
+          }
+        },
+        {
+          "name": "Place Order with Coupon + Points",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    { \"productId\": 1, \"quantity\": 2 },\n    { \"productId\": 4, \"quantity\": 1 }\n  ],\n  \"couponId\": 2,\n  \"usePoints\": 500,\n  \"remark\": \"Use coupon 2 + 500 points\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/orders", "host": ["{{base_url}}"], "path": ["api","orders"] }
+          }
+        },
+        {
+          "name": "My Orders",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/orders", "host": ["{{base_url}}"], "path": ["api","orders"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Simulate Pay",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/api/payments/pay/1", "host": ["{{base_url}}"], "path": ["api","payments","pay","1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Coupons",
+      "item": [
+        {
+          "name": "List Templates",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/coupons/templates", "host": ["{{base_url}}"], "path": ["api","coupons","templates"] }
+          }
+        },
+        {
+          "name": "Claim Coupon",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/api/coupons/claim/2", "host": ["{{base_url}}"], "path": ["api","coupons","claim","2"] }
+          }
+        },
+        {
+          "name": "My Coupons",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/coupons/my", "host": ["{{base_url}}"], "path": ["api","coupons","my"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Feedback",
+      "item": [
+        {
+          "name": "Submit Review",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": 1,\n  \"orderId\": 1,\n  \"rating\": 5,\n  \"comment\": \"Best duck neck ever!\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/feedback", "host": ["{{base_url}}"], "path": ["api","feedback"] }
+          }
+        },
+        {
+          "name": "Product Reviews",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/feedback/product/1", "host": ["{{base_url}}"], "path": ["api","feedback","product","1"] }
+          }
+        }
+      ]
+    }
+  ]
+}
